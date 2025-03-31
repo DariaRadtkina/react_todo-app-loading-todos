@@ -1,4 +1,6 @@
 import React from 'react';
+import classNames from 'classnames';
+import { FilterBy } from '../../types/Todo';
 
 type Props = {
   countItemsCompleted: number;
@@ -22,27 +24,29 @@ export const Footer: React.FC<Props> = ({
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
-          className={`filter__link ${filterTodo === 'all' && 'selected'}`}
           data-cy="FilterLinkAll"
-          onClick={() => setFilterTodo('all')}
+          className={classNames('filter__link', {
+            selected: filterTodo === FilterBy.ALL,
+          })}
+          onClick={() => setFilterTodo(FilterBy.ALL)}
         >
           All
         </a>
 
         <a
           href="#/active"
-          onClick={() => setFilterTodo('active')}
-          className={`filter__link ${filterTodo === 'active' && 'selected'}`}
           data-cy="FilterLinkActive"
+          className={`filter__link ${filterTodo === FilterBy.ACTIVE && 'selected'}`}
+          onClick={() => setFilterTodo(FilterBy.ACTIVE)}
         >
           Active
         </a>
 
         <a
           href="#/completed"
-          className={`filter__link ${filterTodo === 'completed' && 'selected'}`}
           data-cy="FilterLinkCompleted"
-          onClick={() => setFilterTodo('completed')}
+          className={`filter__link ${filterTodo === FilterBy.COMPLETED && 'selected'}`}
+          onClick={() => setFilterTodo(FilterBy.COMPLETED)}
         >
           Completed
         </a>

@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 
 type Props = {
   countItemsCompleted: number;
@@ -9,7 +10,9 @@ export const Header: React.FC<Props> = ({ countItemsCompleted }) => {
     <header className="todoapp__header">
       <button
         type="button"
-        className={`todoapp__toggle-all ${countItemsCompleted === 0 && 'active'}`}
+        className={classNames('todoapp__toggle-all', {
+          active: countItemsCompleted === 0,
+        })}
         data-cy="ToggleAllButton"
       />
 

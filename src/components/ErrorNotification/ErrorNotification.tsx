@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
+import classNames from 'classnames';
+import { Error } from '../../types/Todo';
 
 type Props = {
   errorMessage: string;
-  setErrorMessage: (error: string) => void;
+  setErrorMessage: Dispatch<SetStateAction<Error>>;
 };
 
 export const ErrorNotification: React.FC<Props> = ({
@@ -13,26 +15,23 @@ export const ErrorNotification: React.FC<Props> = ({
     <div
       data-cy="ErrorNotification"
       // eslint-disable-next-line max-len
-      className={`notification is-danger is-light has-text-weight-normal ${errorMessage ? '' : 'hidden'}`}
+      className={classNames(
+        'notification',
+        'is-danger',
+        'is-light',
+        'has-text-weight-normal',
+        {
+          hidden: !errorMessage,
+        },
+      )}
     >
       <button
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => setErrorMessage('')}
+        onClick={() => setErrorMessage(Error.DEFAULT)}
       />
-
       {errorMessage}
-      {/* show only one message at a time */}
-      {/* Unable to load todos
-      <br />
-      Title should not be empty
-      <br />
-      Unable to add a todo
-      <br />
-      Unable to delete a todo
-      <br />
-      Unable to update a todo */}
     </div>
   );
 };

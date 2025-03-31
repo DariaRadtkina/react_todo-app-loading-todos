@@ -1,30 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
-import { getTodos, USER_ID } from './api/todos';
+import * as clientData from './api/todos';
 import { Header } from './components/Header/Header';
 import { Footer } from './components/Footer/Footer';
 import { TodoList } from './components/TodoList/TodoList';
-import { Todo } from './types/Todo';
-// eslint-disable-next-line max-len
-import { ErrorNotification } from './components/ErrorNotification/ErrorNotification';
+import { Error, FilterBy, Todo } from './types/Todo';
+// eslint-disable-next-line prettier/prettier
+import {
+  ErrorNotification
+} from './components/ErrorNotification/ErrorNotification';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filterTodo, setFilterTodo] = useState<string>('all');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [filterTodo, setFilterTodo] = useState<string>(FilterBy.ALL);
+  const [errorMessage, setErrorMessage] = useState<Error>(Error.DEFAULT);
   const [isLoading, setIsLoading] = useState(true);
 
   function getClientData() {
     setIsLoading(true);
 
-    getTodos()
+    clientData
+      .getTodos()
       .then(data => {
         setTodos(data);
-        setErrorMessage('');
+        setErrorMessage(Error.DEFAULT);
       })
       .catch(() => {
-        setErrorMessage('Unable to load todos');
-        setTimeout(() => setErrorMessage(''), 3000);
+        setErrorMessage(Error.LOAD);
+        setTimeout(() => setErrorMessage(Error.DEFAULT), 3000);
       })
       .finally(() => setIsLoading(false));
   }
@@ -32,21 +35,21 @@ export const App: React.FC = () => {
   useEffect(getClientData, []);
 
   const filteredByCompleted = todos.filter(todo => {
-    if (filterTodo === 'active') {
+    if (filterTodo === FilterBy.ACTIVE) {
       return !todo.completed;
     }
 
-    if (filterTodo === 'completed') {
+    if (filterTodo === FilterBy.COMPLETED) {
       return todo.completed;
     }
 
     return true;
   });
 
-  const countFilterNotCompleted = todos.filter(todo => !todo.completed).length;
-  const countFilterCompleted = todos.filter(todo => todo.completed).length;
+  const notCompletedTodosCount = todos.filter(todo => !todo.completed).length;
+  const completedTodoCount = todos.filter(todo => todo.completed).length;
 
-  if (!USER_ID) {
+  if (!clientData.USER_ID) {
     return <UserWarning />;
   }
 
@@ -55,7 +58,7 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header countItemsCompleted={countFilterNotCompleted} />
+        <Header countItemsCompleted={notCompletedTodosCount} />
         {!isLoading ? (
           <TodoList todos={filteredByCompleted} />
         ) : (
@@ -64,8 +67,8 @@ export const App: React.FC = () => {
 
         {todos.length > 0 && (
           <Footer
-            countItemsCompleted={countFilterNotCompleted}
-            countItemsNotCompleted={countFilterCompleted}
+            countItemsCompleted={notCompletedTodosCount}
+            countItemsNotCompleted={completedTodoCount}
             setFilterTodo={setFilterTodo}
             filterTodo={filterTodo}
           />
