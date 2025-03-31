@@ -5,10 +5,7 @@ import { Header } from './components/Header/Header';
 import { Footer } from './components/Footer/Footer';
 import { TodoList } from './components/TodoList/TodoList';
 import { Error, FilterBy, Todo } from './types/Todo';
-// eslint-disable-next-line prettier/prettier
-import {
-  ErrorNotification
-} from './components/ErrorNotification/ErrorNotification';
+import { ErrorNotification } from './components/Error/ErrorNotification';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
