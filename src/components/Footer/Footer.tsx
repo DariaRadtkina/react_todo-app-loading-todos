@@ -36,7 +36,9 @@ export const Footer: React.FC<Props> = ({
         <a
           href="#/active"
           data-cy="FilterLinkActive"
-          className={`filter__link ${filterTodo === FilterBy.ACTIVE && 'selected'}`}
+          className={classNames('filter__link', {
+            selected: filterTodo === FilterBy.ACTIVE,
+          })}
           onClick={() => setFilterTodo(FilterBy.ACTIVE)}
         >
           Active
@@ -45,7 +47,9 @@ export const Footer: React.FC<Props> = ({
         <a
           href="#/completed"
           data-cy="FilterLinkCompleted"
-          className={`filter__link ${filterTodo === FilterBy.COMPLETED && 'selected'}`}
+          className={classNames('filter__link', {
+            selected: filterTodo === FilterBy.COMPLETED,
+          })}
           onClick={() => setFilterTodo(FilterBy.COMPLETED)}
         >
           Completed
