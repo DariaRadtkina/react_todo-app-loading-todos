@@ -32,15 +32,16 @@ export const App: React.FC = () => {
   useEffect(getClientData, []);
 
   const filteredByCompleted = todos.filter(todo => {
-    if (filterTodo === FilterBy.ACTIVE) {
-      return !todo.completed;
-    }
+    switch (filterTodo) {
+      case FilterBy.ACTIVE:
+        return !todo.completed;
 
-    if (filterTodo === FilterBy.COMPLETED) {
-      return todo.completed;
-    }
+      case FilterBy.COMPLETED:
+        return todo.completed;
 
-    return true;
+      default:
+        return true;
+    }
   });
 
   const notCompletedTodosCount = todos.filter(todo => !todo.completed).length;
